@@ -1,26 +1,276 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   OBRA CLARA — "mosaic landing" (black & white, heavy grotesk)
+   Paleta estricta: negro / blanco / zinc translúcido.
+   Tipografía: Open Sauce One (display Bold + body).
+------------------------------------------------------------------- */
+
+@theme {
+  /* Color — warm architectural palette (mostly b/w + warm surfaces) */
+  --color-paper: #f1f0eb; /* background */
+  --color-sand: #f7f5f0; /* surface / cards */
+  --color-ink: #151613; /* text (avoid pure black) */
+  --color-ink-soft: #74746c; /* muted */
+  --color-line: #deddd8; /* soft grey hairline */
+  --color-line-soft: #e5e3dc; /* softer hairline */
+  --color-bronze: #aa9163; /* accent — used very sparingly */
+  --color-bronze-deep: #8c7650; /* links / focus */
+  --color-olive: #6b6b64; /* status (admin) */
+  --color-white: #ffffff;
+
+  /* Type — heavy grotesk */
+  --font-display: "Open Sauce One Bold", "Open Sauce One", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Open Sauce One", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-heavy: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bronze-deep);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+  html {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.12);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
+@layer components {
+  /* ------------------------------------------------------------------
+     Hero — cinematic treatment for the full-bleed photograph.
+     A very fine film grain sits over the image: it gives the flat editorial
+     surface some physical texture and softens the banding in the scrims.
+     Motion is transform/opacity only.
+  ------------------------------------------------------------------- */
+  .film-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23g)'/></svg>");
+    background-size: 160px 160px;
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.75rem, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes hero-settle {
+    from {
+      transform: scale(1.055);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .hero-rise {
+    animation: hero-rise 0.9s var(--ease-heavy) both;
+    will-change: transform, opacity;
+  }
+
+  .hero-settle {
+    animation: hero-settle 2s var(--ease-out-soft) both;
+    will-change: transform;
+  }
+
+  /* Editorial "section marker" */
+  .section-marker {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-bronze-deep);
+  }
+  .section-marker::before {
+    content: "";
+    width: 1.8rem;
+    height: 1px;
+    background-color: var(--color-ink);
+  }
+
+  .section-marker.on-dark {
+    color: #ffffff;
+  }
+  .section-marker.on-dark::before {
+    background-color: #ffffff;
+  }
+
+  /* Blueprint annotation tick */
+  .blueprint-frame {
+    position: relative;
+  }
+  .blueprint-frame::before,
+  .blueprint-frame::after {
+    content: "";
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .blueprint-frame::before {
+    top: -0.5rem;
+    left: -0.5rem;
+    border-top: 1px solid var(--color-ink);
+    border-left: 1px solid var(--color-ink);
+  }
+  .blueprint-frame::after {
+    bottom: -0.5rem;
+    right: -0.5rem;
+    border-bottom: 1px solid var(--color-ink);
+    border-right: 1px solid var(--color-ink);
+  }
+
+  /* Ghost link with sliding underline */
+  .link-ghost {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .link-ghost::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.25s var(--ease-out-soft);
+  }
+  .link-ghost:hover::after,
+  .link-ghost:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Primary button — architectural (6-8px radius, 44-48px height) */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    border-radius: 8px;
+    padding: 0 1.5rem;
+    background-color: var(--color-ink);
+    color: var(--color-sand);
+    font-weight: 600;
+    transition: background-color 0.25s var(--ease-out-soft),
+      opacity 0.2s var(--ease-out-soft);
+  }
+  .btn-primary:hover {
+    background-color: #2a2a26;
+  }
+  .btn-primary:active {
+    opacity: 0.85;
+  }
+  .btn-primary .btn-arrow {
+    display: grid;
+    height: 1.75rem;
+    width: 1.75rem;
+    place-items: center;
+    border-radius: 6px;
+    background-color: rgba(247, 245, 240, 0.14);
+    transition: transform 0.25s var(--ease-heavy);
+  }
+  .btn-primary:hover .btn-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
+    padding: 0 1.5rem;
+    color: var(--color-ink);
+    font-weight: 600;
+    transition: border-color 0.25s var(--ease-out-soft),
+      background-color 0.25s var(--ease-out-soft);
+  }
+  .btn-outline:hover {
+    border-color: var(--color-ink);
+    background-color: rgba(21, 22, 19, 0.04);
+  }
+  .btn-outline:active {
+    opacity: 0.85;
+  }
+}
+
+/* Reduced horizontal overflow safety */
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
 }

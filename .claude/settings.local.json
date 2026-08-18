@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/oscar/Desktop/**)",
+      "Bash(node -e \"console.log\\(require\\('sharp/package.json'\\).version\\)\")",
+      "Bash(node -e \"const s=require\\('sharp'\\); console.log\\('sharp ok', require\\('sharp/package.json'\\).version\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"try{require\\('sharp'\\)}catch\\(e\\){console.log\\('ERR:',e.message.split\\('\\\\n'\\).slice\\(0,6\\).join\\(' | '\\)\\)}\")",
+      "Bash(node \"C:/Users/oscar/AppData/Local/Temp/claude/C--Users-oscar-Desktop-landingsreformas/1938be55-eb17-4460-b953-87d2b5d092b1/scratchpad/crop.js\")",
+      "Bash(NODE_PATH=\"C:/Users/oscar/Desktop/landingsreformas/node_modules\" node \"C:/Users/oscar/AppData/Local/Temp/claude/C--Users-oscar-Desktop-landingsreformas/1938be55-eb17-4460-b953-87d2b5d092b1/scratchpad/crop.js\")",
+      "Bash(NODE_PATH=C:/Users/oscar/Desktop/landingsreformas/node_modules node -e ' *)",
+      "Bash(npm run *)",
+      "Bash(NODE_PATH=\"C:/Users/oscar/Desktop/landingsreformas/node_modules\" node \"C:/Users/oscar/AppData/Local/Temp/claude/C--Users-oscar-Desktop-landingsreformas/1938be55-eb17-4460-b953-87d2b5d092b1/scratchpad/hero.js\")",
+      "Bash(grep -n 'aria-describedby\\\\|id={`${name}-error`}\\\\|${name}-error' src/components/lead-form.tsx)",
+      "WebFetch(domain:intelia-group.com)"
+    ]
+  }
+}
