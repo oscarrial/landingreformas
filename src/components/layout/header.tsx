@@ -22,6 +22,7 @@ export function Header() {
 
   const isActive = (href: string) =>
     href.startsWith("/#") ? false : pathname === href;
+  const budgetHref = "/presupuesto#formulario";
 
   return (
     <header
@@ -72,8 +73,8 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/presupuesto"
-            onClick={() => trackClickCta(CTA_ACTION_LABEL, "/presupuesto")}
+            href={budgetHref}
+            onClick={() => trackClickCta(CTA_ACTION_LABEL, budgetHref)}
             className="hidden rounded-md bg-ink px-5 py-2.5 text-sm font-semibold text-sand transition-colors hover:bg-[#2a2a26] lg:inline-flex"
           >
             {CTA_ACTION_LABEL}
@@ -128,7 +129,7 @@ export function Header() {
             ))}
             <li className="pt-2">
               <Link
-                href="/presupuesto"
+                href={budgetHref}
                 onClick={() => setOpen(false)}
                 className="block rounded-md bg-ink px-4 py-3 text-center text-base font-semibold text-sand"
               >

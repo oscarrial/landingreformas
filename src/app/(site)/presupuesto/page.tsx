@@ -13,7 +13,7 @@ export default function PresupuestoPage() {
   return (
     <section className="border-b border-line bg-paper py-14 lg:py-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-12">
-        <div className="lg:col-span-6">
+        <div className="order-last lg:order-none lg:col-span-6">
           <h1 className="text-balance font-display text-4xl leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl">
             Solicita tu presupuesto de reforma
           </h1>
@@ -42,7 +42,14 @@ export default function PresupuestoPage() {
           </p>
         </div>
 
-        <div className="lg:col-span-6">
+        <div
+          id="formulario"
+          tabIndex={-1}
+          className="order-first scroll-mt-20 outline-none lg:order-none lg:col-span-6"
+        >
+          <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-bronze lg:hidden">
+            Formulario de presupuesto
+          </p>
           <LeadForm />
         </div>
       </div>

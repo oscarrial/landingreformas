@@ -17,6 +17,9 @@ interface LeadFormSectionProps extends LeadFormProps {
  * The lead form in its page context. Every public page ends on one of these:
  * this is a lead-capture site, so the form is the content, not a destination
  * behind a button.
+ *
+ * The section remains the desktop anchor so its context is visible there. On
+ * small screens CtaButton uses the marked form block as the more useful target.
  */
 export function LeadFormSection({
   id = "presupuesto",
@@ -29,8 +32,8 @@ export function LeadFormSection({
   return (
     <section
       id={id}
-      // tabIndex + scroll-mt: CtaButton focuses this section after scrolling,
-      // and the sticky 64px header must not sit over the heading.
+      // tabIndex + scroll-mt keep keyboard focus and the sticky header from
+      // obscuring the selected section or form.
       tabIndex={-1}
       className={cn(
         "scroll-mt-20 outline-none",
@@ -82,7 +85,14 @@ export function LeadFormSection({
           </p>
         </div>
 
-        <LeadForm defaultReformType={defaultReformType} />
+        <div
+          id={`${id}-formulario`}
+          data-mobile-form-target
+          tabIndex={-1}
+          className="scroll-mt-20 outline-none"
+        >
+          <LeadForm defaultReformType={defaultReformType} />
+        </div>
       </div>
     </section>
   );

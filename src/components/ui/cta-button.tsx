@@ -57,12 +57,16 @@ export function CtaButton({
     if (!isSamePage || event.metaKey || event.ctrlKey || event.shiftKey) return;
     const target = document.getElementById(href.slice(1));
     if (!target) return; // let the browser try the native jump
+    const scrollTarget =
+      window.matchMedia("(max-width: 767px)").matches
+        ? target.querySelector<HTMLElement>("[data-mobile-form-target]") ?? target
+        : target;
     event.preventDefault();
     // Smoothness comes from `html { scroll-behavior }`, which the global
     // reduced-motion block already switches off.
-    target.scrollIntoView({ block: "start" });
-    // Target carries tabIndex={-1}; keyboard users land on the form too.
-    target.focus({ preventScroll: true });
+    scrollTarget.scrollIntoView({ block: "start" });
+    // The target carries tabIndex={-1}; keyboard users land on the form too.
+    scrollTarget.focus({ preventScroll: true });
   };
 
   const showArrow = variant !== "underline";

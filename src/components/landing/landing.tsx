@@ -354,7 +354,7 @@ export function Landing() {
               className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-ink-soft"
               aria-label="Legal"
             >
-              <Link href="/presupuesto" className="hover:text-ink">
+              <Link href="/presupuesto#formulario" className="hover:text-ink">
                 Presupuesto
               </Link>
               <Link href="/proyectos" className="hover:text-ink">

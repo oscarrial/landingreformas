@@ -30,7 +30,7 @@ export function FinalCta() {
             posibilidades de tu vivienda.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link href="/presupuesto" className="btn-primary bg-paper px-7 py-4 text-base text-ink hover:bg-white">
+            <Link href="/presupuesto#formulario" className="btn-primary bg-paper px-7 py-4 text-base text-ink hover:bg-white">
               Quiero valorar mi reforma
               <span className="btn-arrow bg-ink/10 text-ink" aria-hidden="true">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.75">

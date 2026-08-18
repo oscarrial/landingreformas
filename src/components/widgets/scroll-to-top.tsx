@@ -14,6 +14,15 @@ export function ScrollToTop() {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
+
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      const frame = requestAnimationFrame(() => {
+        document.getElementById(hash)?.scrollIntoView({ block: "start" });
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname]);
 

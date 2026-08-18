@@ -52,7 +52,7 @@ export function MobileStickyCta() {
             </a>
           ) : null}
           <Link
-            href="/presupuesto"
+            href="/presupuesto#formulario"
             className="btn-primary min-h-11 flex-1 justify-center text-base"
           >
             Pedir presupuesto
