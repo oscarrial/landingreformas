@@ -31,6 +31,9 @@ export function AdminHeader() {
           <Link href="/admin/leads" className="link-ghost text-ink-soft">
             Leads
           </Link>
+          <Link href="/admin/posts" className="link-ghost text-ink-soft">
+            Blog
+          </Link>
           <Link href="/" className="link-ghost text-ink-soft">
             Ver web
           </Link>

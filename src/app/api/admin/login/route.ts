@@ -16,12 +16,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const ip = getClientIp(request);
-  const limit = rateLimit({ key: `admin:login:${ip}`, limit: 10, windowMs: 60_000 });
-  if (!limit.ok) {
-    return Response.json({ error: "Demasiados intentos. Espera un minuto." }, { status: 429 });
-  }
-
   let body: { password?: string };
   try {
     body = await request.json();
@@ -33,7 +27,22 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Contraseña requerida." }, { status: 400 });
   }
 
+  // Guard against brute force WITHOUT charging successful attempts: the
+  // check below never consumes a slot, so typing the right password is
+  // never rate-limited. Only failed verifications count against the limit.
+  const ip = getClientIp(request);
+  const key = `admin:login:${ip}`;
+  const guard = rateLimit({ key, limit: 10, windowMs: 60_000, charge: false });
+  if (!guard.ok) {
+    const wait = Math.ceil(guard.retryAfterMs / 1000);
+    return Response.json(
+      { error: `Demasiados intentos. Espera ${wait} s.` },
+      { status: 429 }
+    );
+  }
+
   if (!verifyAdminPassword(body.password)) {
+    rateLimit({ key, limit: 10, windowMs: 60_000 });
     return Response.json({ error: "Credenciales incorrectas." }, { status: 401 });
   }
 

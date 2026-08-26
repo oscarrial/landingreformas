@@ -1,6 +1,10 @@
 import { siteConfig } from "@/config/site";
 import type { LeadRepository } from "@/lib/db/adapter";
 import type {
+  BlogPost,
+  BlogPostInput,
+  BlogPostPatch,
+  BlogPostStatus,
   DashboardMetrics,
   Lead,
   LeadCreateInput,
@@ -153,5 +157,99 @@ export const memoryRepository: LeadRepository = {
     return [...store.values()].sort(
       (a, b) => b.created_at.localeCompare(a.created_at)
     );
+  },
+};
+
+/* ------------------------------------------------------------------
+   Blog posts (in-memory — mirrors blogPostgresRepository)
+------------------------------------------------------------------ */
+
+const blogStore = new Map<number, BlogPost>();
+let blogSeq = 0;
+
+export function resetBlogMemoryDb(): void {
+  blogStore.clear();
+  blogSeq = 0;
+}
+
+function blogNow(): string {
+  return new Date().toISOString();
+}
+
+function blogNextId(): number {
+  blogSeq += 1;
+  return blogSeq;
+}
+
+function sortPosts(items: BlogPost[]): BlogPost[] {
+  return items.sort((a, b) => {
+    const aPub = a.published_at ?? "0";
+    const bPub = b.published_at ?? "0";
+    if (aPub !== bPub) return bPub.localeCompare(aPub);
+    return b.updated_at.localeCompare(a.updated_at);
+  });
+}
+
+export const blogMemoryRepository = {
+  async listPosts(
+    params: { status?: BlogPostStatus; page?: number; pageSize?: number } = {}
+  ): Promise<{ items: BlogPost[]; total: number }> {
+    const page = Math.max(1, params.page ?? 1);
+    const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 20));
+    let items = [...blogStore.values()];
+    if (params.status) items = items.filter((p) => p.status === params.status);
+    items = sortPosts(items);
+    const start = (page - 1) * pageSize;
+    return { items: items.slice(start, start + pageSize), total: items.length };
+  },
+
+  async listPublished(): Promise<BlogPost[]> {
+    return sortPosts(
+      [...blogStore.values()].filter((p) => p.status === "published")
+    );
+  },
+
+  async getPostBySlug(slug: string): Promise<BlogPost | null> {
+    for (const post of blogStore.values()) {
+      if (post.slug === slug) return post;
+    }
+    return null;
+  },
+
+  async createPost(input: BlogPostInput): Promise<BlogPost> {
+    const ts = blogNow();
+    const post: BlogPost = {
+      id: blogNextId(),
+      slug: input.slug,
+      title: input.title,
+      excerpt: input.excerpt,
+      content: input.content,
+      status: input.status,
+      published_at: input.status === "published" ? ts : null,
+      created_at: ts,
+      updated_at: ts,
+    };
+    blogStore.set(post.id, post);
+    return post;
+  },
+
+  async updatePost(id: number, patch: BlogPostPatch): Promise<BlogPost | null> {
+    const post = blogStore.get(id);
+    if (!post) return null;
+    const updated: BlogPost = {
+      ...post,
+      ...patch,
+      published_at:
+        patch.status === "published" && !post.published_at
+          ? blogNow()
+          : post.published_at,
+      updated_at: blogNow(),
+    };
+    blogStore.set(id, updated);
+    return updated;
+  },
+
+  async deletePost(id: number): Promise<boolean> {
+    return blogStore.delete(id);
   },
 };

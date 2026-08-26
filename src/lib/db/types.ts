@@ -30,6 +30,36 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
 
 export type NotifyStatus = "pending" | "sent" | "failed" | "disabled";
 
+export type BlogPostStatus = "draft" | "published";
+
+export const BLOG_STATUSES: BlogPostStatus[] = ["draft", "published"];
+
+/** A blog entry managed from the admin panel. */
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  /** Short summary shown in listings and used as meta description. */
+  excerpt: string;
+  /** Body text. Paragraphs split by blank lines; "## " = h2; "- " = bullets. */
+  content: string;
+  status: BlogPostStatus;
+  /** Set the first time the post is published; preserved afterwards. */
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPostInput {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  status: BlogPostStatus;
+}
+
+export type BlogPostPatch = Partial<BlogPostInput>;
+
 /** Attribution captured at lead creation time (first-party tracking). */
 export interface LeadAttribution {
   landing_page: string | null;

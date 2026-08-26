@@ -1,13 +1,13 @@
 import { isDbConfigured } from "@/lib/db/adapter";
-import { memoryRepository, resetMemoryDb } from "@/lib/db/memory";
-import { migrate, postgresRepository } from "@/lib/db/postgres";
+import type { BlogRepository } from "@/lib/db/adapter";
+import { blogMemoryRepository, memoryRepository, resetMemoryDb } from "@/lib/db/memory";
+import { migrate, postgresRepository, blogPostgresRepository } from "@/lib/db/postgres";
 import type { LeadRepository } from "@/lib/db/adapter";
 
 let repo: LeadRepository | null = null;
 let warned = false;
 
-/**
- * Returns the configured lead repository.
+/** Returns the configured lead repository.
  * - DATABASE_URL set  → PostgreSQL (production).
  * - otherwise         → in-memory adapter (local dev / tests). Loses data
  *                       on restart and is NOT production-safe.
@@ -29,6 +29,11 @@ export function getLeadRepository(): LeadRepository {
   }
   repo = resolved;
   return resolved;
+}
+
+/** Blog posts repository — same adapter swap as leads. */
+export function getBlogRepository(): BlogRepository {
+  return isDbConfigured() ? blogPostgresRepository : blogMemoryRepository;
 }
 
 /** Ensures the schema exists (Postgres adapter). Safe to call on boot. */

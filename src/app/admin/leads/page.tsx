@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { getLeadRepository } from "@/lib/db";
+import { getLeadRepository, ensureSchema } from "@/lib/db";
 import { formatDateShort } from "@/lib/format";
 import { LeadFilters } from "@/components/admin/lead-filters";
-import { STATUS_BADGE_CLASSES } from "@/components/admin/lead-status";
+import { QuickStatusSelect } from "@/components/admin/quick-status-select";
 
 interface LeadsPageProps {
   searchParams: Promise<{
@@ -18,6 +18,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LeadsPage({ searchParams }: LeadsPageProps) {
   const params = await searchParams;
+  await ensureSchema();
   const page = Math.max(1, Number(params.page ?? 1) || 1);
   const pageSize = 20;
 
@@ -79,7 +80,7 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                   {lead.attribution.utm_source ?? lead.attribution.first_touch_source ?? "direct"}
                 </td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={lead.status} />
+                  <QuickStatusSelect leadId={lead.id} status={lead.status} />
                 </td>
                 <td className="px-4 py-3 text-ink-soft">{formatDateShort(lead.created_at)}</td>
               </tr>
@@ -109,27 +110,6 @@ function reformLabel(value: string): string {
     otro: "Otro",
   };
   return labels[value] ?? value;
-}
-
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={STATUS_BADGE_CLASSES[status] ?? "bg-line text-ink-soft"}>
-      {statusLabel(status)}
-    </span>
-  );
-}
-
-function statusLabel(status: string): string {
-  const labels: Record<string, string> = {
-    new: "Nuevo",
-    contacted: "Contactado",
-    qualified: "Cualificado",
-    visit_scheduled: "Visita",
-    quote_sent: "Presupuesto",
-    won: "Ganado",
-    lost: "Perdido",
-  };
-  return labels[status] ?? status;
 }
 
 function Pagination({ page, totalPages }: { page: number; totalPages: number }) {

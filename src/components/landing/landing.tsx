@@ -360,6 +360,9 @@ export function Landing() {
               <Link href="/proyectos" className="hover:text-ink">
                 Proyectos
               </Link>
+              <Link href="/blog" className="hover:text-ink">
+                Blog
+              </Link>
               <Link href="/aviso-legal" className="hover:text-ink">
                 Aviso legal
               </Link>

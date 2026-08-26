@@ -17,6 +17,12 @@ export interface RateLimitOptions {
   limit: number;
   /** Window in milliseconds. */
   windowMs: number;
+  /**
+   * Whether this call consumes a slot. Pass `false` to only check the
+   * bucket (e.g. verify credentials first, charge the attempt only when
+   * they fail, so honest mistakes never lock the user out).
+   */
+  charge?: boolean;
 }
 
 export interface RateLimitResult {
@@ -29,6 +35,7 @@ export function rateLimit({
   key,
   limit,
   windowMs,
+  charge = true,
 }: RateLimitOptions): RateLimitResult {
   const now = Date.now();
   const bucket = buckets.get(key) ?? { timestamps: [] };
@@ -43,7 +50,7 @@ export function rateLimit({
     return { ok: false, remaining: 0, retryAfterMs };
   }
 
-  bucket.timestamps.push(now);
+  if (charge) bucket.timestamps.push(now);
   buckets.set(key, bucket);
   return { ok: true, remaining: limit - bucket.timestamps.length, retryAfterMs: 0 };
 }

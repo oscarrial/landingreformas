@@ -101,6 +101,7 @@ export function Footer() {
           </p>
           <nav aria-label="Legal" className="flex flex-wrap gap-5">
             {[
+              { label: "Blog", href: "/blog" },
               { label: "Aviso legal", href: "/aviso-legal" },
               { label: "Privacidad", href: "/privacidad" },
               { label: "Cookies", href: "/cookies" },

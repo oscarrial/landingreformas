@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getLeadRepository } from "@/lib/db";
+import { getLeadRepository, ensureSchema } from "@/lib/db";
 import { formatDate, formatEuro } from "@/lib/format";
 import { computeCommission } from "@/lib/commission";
 import { LeadDetailForm } from "@/components/admin/lead-detail-form";
@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   const { id } = await params;
+  await ensureSchema();
   const leadId = Number(id);
   const repo = getLeadRepository();
   const lead = Number.isInteger(leadId) ? await repo.findById(leadId) : null;

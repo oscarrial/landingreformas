@@ -215,6 +215,7 @@ export const siteConfig: SiteConfig = {
   nav: [
     { label: "Reformas", href: "/reformas" },
     { label: "Proyectos", href: "/proyectos" },
+    { label: "Blog", href: "/blog" },
     { label: "Cómo trabajamos", href: "/#proceso" },
     { label: "Preguntas frecuentes", href: "/#faq" },
   ],

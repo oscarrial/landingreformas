@@ -2,6 +2,10 @@ import postgres from "postgres";
 
 import type { LeadRepository } from "@/lib/db/adapter";
 import type {
+  BlogPost,
+  BlogPostInput,
+  BlogPostPatch,
+  BlogPostStatus,
   DashboardMetrics,
   Lead,
   LeadCreateInput,
@@ -33,6 +37,7 @@ function getSql(): postgres.Sql {
 }
 
 export const LEAD_TABLE = "leads";
+export const BLOG_TABLE = "blog_posts";
 
 export async function migrate(): Promise<void> {
   const db = getSql();
@@ -80,6 +85,20 @@ export async function migrate(): Promise<void> {
       commission_rate   NUMERIC(5,4) NOT NULL DEFAULT 0.05,
       commission_basis  TEXT NOT NULL DEFAULT 'collected_amount',
       notify_status     TEXT
+    );
+  `;
+
+  await db`
+    CREATE TABLE IF NOT EXISTS ${db(BLOG_TABLE)} (
+      id           BIGSERIAL PRIMARY KEY,
+      slug         TEXT NOT NULL UNIQUE,
+      title        TEXT NOT NULL,
+      excerpt      TEXT NOT NULL,
+      content      TEXT NOT NULL,
+      status       TEXT NOT NULL DEFAULT 'draft',
+      published_at TIMESTAMPTZ,
+      created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `;
 }
@@ -354,3 +373,145 @@ export const postgresRepository: LeadRepository = {
     return rows.map(mapRow);
   },
 };
+
+interface BlogPostRow {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  status: string;
+  published_at: Date | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
+function mapBlogRow(r: BlogPostRow): BlogPost {
+  return {
+    id: Number(r.id),
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt,
+    content: r.content,
+    status: (r.status === "published" ? "published" : "draft") as BlogPostStatus,
+    published_at: r.published_at ? r.published_at.toISOString() : null,
+    created_at: r.created_at.toISOString(),
+    updated_at: r.updated_at.toISOString(),
+  };
+}
+
+/** Blog posts repository (PostgreSQL). */
+export const blogPostgresRepository = {
+  async listPosts(params: {
+    status?: BlogPostStatus;
+    page?: number;
+    pageSize?: number;
+  } = {}): Promise<{ items: BlogPost[]; total: number }> {
+    const db = getSql();
+    const status = params.status;
+    const page = Math.max(1, params.page ?? 1);
+    const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 20));
+    const offset = (page - 1) * pageSize;
+
+    const where =
+      status === undefined ? db`` : db`WHERE status = ${status}`;
+
+    const rows = await db<BlogPostRow[]>`
+      SELECT * FROM ${db(BLOG_TABLE)} ${where}
+      ORDER BY
+        CASE WHEN published_at IS NULL THEN 0 ELSE 1 END DESC,
+        published_at DESC,
+        updated_at DESC
+      LIMIT ${pageSize} OFFSET ${offset}
+    `;
+    const countRows = await db<{ total: string }[]>`
+      SELECT COUNT(*)::text AS total FROM ${db(BLOG_TABLE)} ${where}
+    `;
+    return {
+      items: rows.map(mapBlogRow),
+      total: Number(countRows[0]?.total ?? 0),
+    };
+  },
+
+  async listPublished(): Promise<BlogPost[]> {
+    const db = getSql();
+    const rows = await db<BlogPostRow[]>`
+      SELECT * FROM ${db(BLOG_TABLE)}
+      WHERE status = 'published'
+      ORDER BY published_at DESC, id DESC
+    `;
+    return rows.map(mapBlogRow);
+  },
+
+  async getPostBySlug(slug: string): Promise<BlogPost | null> {
+    const db = getSql();
+    const rows = await db<BlogPostRow[]>`
+      SELECT * FROM ${db(BLOG_TABLE)} WHERE slug = ${slug} LIMIT 1
+    `;
+    return rows[0] ? mapBlogRow(rows[0]) : null;
+  },
+
+  async createPost(input: BlogPostInput): Promise<BlogPost> {
+    const db = getSql();
+    const now = new Date();
+    const publishedAt =
+      input.status === "published" ? now.toISOString() : null;
+    const rows = await db<BlogPostRow[]>`
+      INSERT INTO ${db(BLOG_TABLE)} (slug, title, excerpt, content, status, published_at, created_at, updated_at)
+      VALUES (${input.slug}, ${input.title}, ${input.excerpt}, ${input.content}, ${input.status}, ${publishedAt}, ${now.toISOString()}, ${now.toISOString()})
+      RETURNING *
+    `;
+    return mapBlogRow(rows[0]!);
+  },
+
+  async updatePost(id: number, patch: BlogPostPatch): Promise<BlogPost | null> {
+    const db = getSql();
+    const existing = await db<BlogPostRow[]>`SELECT * FROM ${db(BLOG_TABLE)} WHERE id = ${id} LIMIT 1`;
+    if (!existing[0]) return null;
+
+    const sets: string[] = [];
+    const vals: (string | number | null)[] = [];
+
+    const push = (col: string, v: string | number | null) => {
+      sets.push(`${col} = $${vals.length + 1}`);
+      vals.push(v);
+    };
+
+    if (patch.slug !== undefined) push("slug", patch.slug);
+    if (patch.title !== undefined) push("title", patch.title);
+    if (patch.excerpt !== undefined) push("excerpt", patch.excerpt);
+    if (patch.content !== undefined) push("content", patch.content);
+    if (patch.status !== undefined) {
+      push("status", patch.status);
+      const wasUnpublished =
+        patch.status === "published" && !existing[0].published_at;
+      if (wasUnpublished) push("published_at", new Date().toISOString());
+    }
+
+    push("updated_at", new Date().toISOString());
+
+    const query =
+      `UPDATE ${BLOG_TABLE} SET ${sets.join(", ")} WHERE id = $${vals.length + 1} RETURNING *`;
+    const rows = await db.unsafe<BlogPostRow[]>(query, [...vals, id]);
+    return rows[0] ? mapBlogRow(rows[0]) : null;
+  },
+
+  async deletePost(id: number): Promise<boolean> {
+    const db = getSql();
+    const rows = await db<{ id: string }[]>`
+      DELETE FROM ${db(BLOG_TABLE)} WHERE id = ${id} RETURNING id
+    `;
+    return rows.length > 0;
+  },
+};
+
+/** Whether a Postgres error is a unique-violation on slug. */
+export function isBlogSlugConflict(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return (
+    message.includes("unique") ||
+    message.includes("23505") ||
+    message.includes("duplicate") ||
+    message.includes("slug")
+  );
+}
