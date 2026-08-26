@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { BeforeAfter } from "@/components/landing/before-after";
+import { Footer } from "@/components/layout/footer";
 import { FaqList } from "@/components/sections/faq-list";
 import { CtaCard } from "@/components/sections/cta-card";
 import { LeadFormSection } from "@/components/sections/lead-form-section";
@@ -16,7 +17,6 @@ import {
   landingServices,
   processSummary,
 } from "@/config/landing";
-import { siteConfig } from "@/config/site";
 
 /** Page gutter — 40px at the 1440px design width, tighter on small screens. */
 const GUTTER = "px-5 md:px-10";
@@ -331,55 +331,8 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ============ FOOTER (slim, editorial) ============ */}
-      <footer className="border-t border-line bg-sand py-12">
-        <div className={SHELL}>
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-            <p className="text-xl font-bold uppercase tracking-tight">
-              {siteConfig.brandName.split(" ")[0]}
-              {siteConfig.brandName.split(" ")[1] ? (
-                <span className="ml-1.5">{siteConfig.brandName.split(" ")[1]}</span>
-              ) : null}
-            </p>
-              <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">
-                {siteConfig.descriptor} · {siteConfig.serviceArea}
-              </p>
-              {/* Review marker — drop once siteConfig.phone/email are real. */}
-              <p className="mt-2 text-xs uppercase tracking-[0.14em] text-ink-soft">
-                Teléfono y email: TODO configurar
-              </p>
-            </div>
-            <nav
-              className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-ink-soft"
-              aria-label="Legal"
-            >
-              <Link href="/presupuesto#formulario" className="hover:text-ink">
-                Presupuesto
-              </Link>
-              <Link href="/proyectos" className="hover:text-ink">
-                Proyectos
-              </Link>
-              <Link href="/blog" className="hover:text-ink">
-                Blog
-              </Link>
-              <Link href="/aviso-legal" className="hover:text-ink">
-                Aviso legal
-              </Link>
-              <Link href="/privacidad" className="hover:text-ink">
-                Privacidad
-              </Link>
-              <Link href="/cookies" className="hover:text-ink">
-                Cookies
-              </Link>
-            </nav>
-          </div>
-          <p className="mt-8 border-t border-line pt-6 text-xs text-ink-soft">
-            © {new Date().getFullYear()} {siteConfig.brandName}. Plataforma de
-            captación de reformas; las obras las ejecuta el proveedor operativo.
-          </p>
-        </div>
-      </footer>
+      {/* ============ FOOTER (shared with the rest of the site) ============ */}
+      <Footer />
     </div>
   );
 }

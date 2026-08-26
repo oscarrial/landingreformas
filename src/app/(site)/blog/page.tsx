@@ -14,6 +14,9 @@ export const metadata = buildMetadata({
   path: "/blog",
 });
 
+// Reads published posts from the DB — never pre-render it with an empty list.
+export const dynamic = "force-dynamic";
+
 const SHELL = "mx-auto w-full max-w-[1440px] px-5 md:px-10";
 
 export default async function BlogPage() {
