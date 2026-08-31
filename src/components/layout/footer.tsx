@@ -36,6 +36,16 @@ export function Footer() {
             <Link href="/presupuesto#formulario" className="hover:text-ink">
               Presupuesto
             </Link>
+            {siteConfig.social.instagram ? (
+              <a
+                href={siteConfig.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-ink"
+              >
+                Instagram
+              </a>
+            ) : null}
           </nav>
         </div>
 

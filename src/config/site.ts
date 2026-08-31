@@ -201,8 +201,8 @@ export const siteConfig: SiteConfig = {
      SOCIAL
   ------------------------------------------------------------------ */
   social: {
-    instagram: "", // TODO
-    linkedin: "", // TODO
+    instagram: "https://www.instagram.com/koflat_oficial/",
+    linkedin: "",
   },
 
   /* ------------------------------------------------------------------
