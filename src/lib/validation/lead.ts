@@ -100,7 +100,20 @@ export const leadSchema = z.object({
    *  the route drops it silently. */
   website: z.string().max(200).optional().default(""),
 
-  attribution: attributionSchema.partial().optional().default({}),
+  attribution: attributionSchema
+    .partial()
+    .optional()
+    .default({})
+    // Fields the payload did not carry are `undefined` after `partial()`;
+    // postgres.js rejects undefined values (UNDEFINED_VALUE). Normalize to
+    // null before they reach the DB layer.
+    .transform((a) => {
+      const out: Record<string, string | null> = {};
+      for (const key of Object.keys(attributionSchema.shape)) {
+        out[key] = a[key as keyof typeof a] ?? null;
+      }
+      return out;
+    }),
 
   /** Lead id passed from a previous attempt (idempotency, optional). */
   client_lead_id: z

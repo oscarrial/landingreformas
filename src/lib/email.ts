@@ -89,7 +89,8 @@ export async function sendLeadEmail(lead: Lead): Promise<EmailSendStatus> {
   if (webhookUrl) {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 5000);
+      // Apps Script cold starts can pass 5 s; give the bridge time to respond.
+      const timer = setTimeout(() => controller.abort(), 15000);
       const res = await fetch(webhookUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

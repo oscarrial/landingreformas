@@ -72,4 +72,20 @@ describe("leadSchema", () => {
     const parsed = leadSchema.safeParse({ ...validPayload, website: "bot" });
     expect(parsed.success).toBe(true);
   });
+
+  it("normalizes missing attribution fields to null (no undefined)", () => {
+    const parsed = leadSchema.safeParse({
+      ...validPayload,
+      attribution: { utm_source: "google" },
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      const a = parsed.data.attribution as Record<string, unknown>;
+      expect(a.utm_source).toBe("google");
+      expect(a.utm_term).toBeNull();
+      expect(a.utm_content).toBeNull();
+      expect(a.gclid).toBeNull();
+      expect(Object.values(a)).not.toContain(undefined);
+    }
+  });
 });
