@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/reformas-pisos-madrid", priority: 0.8, changeFrequency: "monthly" },
     { path: "/reformas-cocinas-madrid", priority: 0.8, changeFrequency: "monthly" },
     { path: "/reformas-banos-madrid", priority: 0.8, changeFrequency: "monthly" },
+    { path: "/reformas-humedades-madrid", priority: 0.8, changeFrequency: "monthly" },
     { path: "/proyectos", priority: 0.6, changeFrequency: "monthly" },
     { path: "/presupuesto", priority: 0.9, changeFrequency: "monthly" },
     { path: "/blog", priority: 0.6, changeFrequency: "weekly" },

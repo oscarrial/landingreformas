@@ -1,7 +1,7 @@
 import { photos, type ObraPhoto } from "@/config/photos";
 
 /**
- * SERVICES — content for the four initial service pages.
+ * SERVICES — content for the service pages.
  * Copy is intentionally distinct per service: different intent, doubts,
  * process, scope, FAQs. No invented claims.
  *
@@ -321,6 +321,7 @@ export const services: Service[] = [
       { label: "Reformas integrales", href: "/reformas-integrales-madrid" },
       { label: "Reformas de pisos", href: "/reformas-pisos-madrid" },
       { label: "Reformas de cocinas", href: "/reformas-cocinas-madrid" },
+      { label: "Tratamiento de humedades", href: "/reformas-humedades-madrid" },
     ],
     differentiator: {
       kicker: "Proceso",
@@ -331,6 +332,75 @@ export const services: Service[] = [
     todos: [
       "Confirmar con el proveedor los criterios técnicos de redistribución de baños.",
       "Confirmar el tratamiento de humedades previas a la reforma.",
+    ],
+  },
+  {
+    slug: "reformas-humedades-madrid",
+    shortName: "Humedades",
+    name: "Tratamiento de humedades",
+    category: "Humedades · Madrid",
+    h1: "Tratamiento de humedades en Madrid: primero el origen, después la pared",
+    intro:
+      "Una humedad no se arregla pintando encima. Antes de reparar hay que saber de dónde viene el agua: una filtración, capilaridad del muro, condensación o una instalación. Identificamos el origen, saneamos el soporte y reparamos para que no vuelva a aparecer.",
+    metaTitle:
+      "Tratamiento de humedades en Madrid | Diagnóstico y reparación | KOFLAT",
+    metaDescription:
+      "Diagnóstico y tratamiento de humedades en Madrid: filtraciones, capilaridad y condensación. Presupuesto detallado por partidas y un único interlocutor.",
+    cardLine:
+      "Diagnóstico del origen, saneado del soporte y reparación para que la humedad no vuelva.",
+    photos: { before: photos.humedadAntes, after: photos.humedadDespues },
+    sections: [
+      {
+        heading: "Por qué una humedad vuelve a aparecer",
+        body: "Casi siempre vuelve porque se reparó el síntoma y no la causa. Una mancha en la pared puede venir de una filtración exterior, de una bajante, de capilaridad del terreno o de condensación interior; cada origen se trata de forma distinta. Por eso el trabajo empieza identificando de dónde viene el agua y no tapando la pared.",
+        points: [
+          "Identificación del origen antes de presupuestar la reparación",
+          "Saneado del soporte: se retira pintura y revoque levantados",
+          "Reparación y acabado, con rodapié y pintura repuestos",
+        ],
+      },
+      {
+        heading: "Qué se valora en la visita",
+        body: "En la visita se revisa la extensión de la humedad, los materiales de la pared y el entorno: instalaciones cercanas, orientación y ventilación de la estancia. Con eso se decide qué tratamiento tiene sentido y cuál no. TODO: confirmar el alcance exacto del diagnóstico con el proveedor.",
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Se puede pintar directamente sobre una humedad?",
+        answer:
+          "No es recomendable. Si el origen sigue activo, la pintura vuelve a levantarse en pocos meses. Primero se identifica y se corrige el origen, se sanea el soporte y después se pinta.",
+      },
+      {
+        question: "¿Cuánto cuesta quitar una humedad?",
+        answer:
+          "Depende del origen, de la superficie afectada y de si hay que intervenir en la instalación o en el exterior. Con los datos y una visita se entrega un presupuesto desglosado por partidas.",
+      },
+      {
+        question: "¿Qué tipos de humedad tratáis?",
+        answer:
+          "Filtraciones, capilaridad y condensación, que se diagnostican y se tratan de forma distinta. TODO: confirmar con el proveedor los sistemas concretos de tratamiento que aplica.",
+      },
+      {
+        question: "¿La reparación tiene garantía?",
+        answer:
+          "La garantía se entrega por escrito con el presupuesto. TODO: confirmar la garantía específica que ofrece el proveedor para tratamientos de humedad.",
+      },
+    ],
+    related: [
+      { label: "Reformas de baños", href: "/reformas-banos-madrid" },
+      { label: "Reformas de pisos", href: "/reformas-pisos-madrid" },
+      { label: "Reformas integrales", href: "/reformas-integrales-madrid" },
+    ],
+    differentiator: {
+      kicker: "Diagnóstico",
+      title: "El origen no está donde aparece la mancha.",
+      body:
+        "Reparar una humedad sin encontrar su origen es tirar el dinero. El trabajo empieza averiguando de dónde viene el agua, no tapando la pared.",
+    },
+    todos: [
+      "Confirmar con el proveedor los sistemas de tratamiento que aplica (inyección, impermeabilización, ventilación…).",
+      "Confirmar si el diagnóstico incluye pruebas específicas de humedad.",
+      "Confirmar la garantía que se ofrece por escrito.",
     ],
   },
 ];

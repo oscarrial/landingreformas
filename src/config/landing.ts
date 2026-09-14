@@ -225,8 +225,8 @@ export const landingServices: LandingService[] = [
     description:
       "Diagnóstico y tratamiento de filtraciones, capilaridad y condensación.",
     photo: photos.humedadAntes,
-    href: "/presupuesto#formulario",
-    pending: true,
+    href: "/reformas-humedades-madrid",
+    pending: false,
   },
 ];
 
