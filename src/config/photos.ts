@@ -24,6 +24,8 @@ import dormitorioAntes from "@/assets/obra/dormitorio-antes.png";
 import dormitorioDespues from "@/assets/obra/dormitorio-despues.png";
 import dormitorio3Antes from "@/assets/obra/dormitorio3-antes.png";
 import dormitorio3Despues from "@/assets/obra/dormitorio3-despues.png";
+import humedadAntes from "@/assets/obra/humedad-antes.jpeg";
+import humedadDespues from "@/assets/obra/humedad-despues.jpeg";
 import pasilloAntes from "@/assets/obra/pasillo-antes.png";
 import pasilloDespues from "@/assets/obra/pasillo-despues.png";
 import salonAntes from "@/assets/obra/salon-antes.png";
@@ -76,6 +78,14 @@ export const photos = {
   dormitorio3Despues: {
     src: dormitorio3Despues,
     alt: "Dormitorio individual después de la reforma, con escritorio junto a la ventana",
+  },
+  humedadAntes: {
+    src: humedadAntes,
+    alt: "Pared con humedad antes de la reparación, con pintura levantada y manchas de moho junto al rodapié",
+  },
+  humedadDespues: {
+    src: humedadDespues,
+    alt: "La misma pared después de reparar la humedad, con pintura lisa y rodapié repuesto",
   },
   pasilloAntes: {
     src: pasilloAntes,

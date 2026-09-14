@@ -12,7 +12,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 export const metadata = buildMetadata({
   title: "Reformas en Madrid",
   description:
-    "Los cuatro tipos de reforma que ejecutamos en Madrid: integrales, pisos, cocinas y baños. Alcance de cada uno y a quién le encaja.",
+    "Los cinco tipos de reforma que ejecutamos en Madrid: integrales, pisos, cocinas, baños y humedades. Alcance de cada uno y a quién le encaja.",
   path: "/reformas",
 });
 
@@ -37,7 +37,7 @@ export default function ReformasPage() {
           </div>
           <div className="lg:pb-2">
             <p className="text-[15px] leading-[1.65] text-ink-soft">
-              Cuatro alcances. Cambian los gremios y los plazos; no la forma de
+              Cinco alcances. Cambian los gremios y los plazos; no la forma de
               llevar la obra.
             </p>
             <CtaButton className="mt-7" />
@@ -103,7 +103,7 @@ export default function ReformasPage() {
         <CtaCard
           className="mt-12"
           tone="sand"
-          title="Cualquiera de los cuatro empieza igual: una visita."
+          title="Todos empiezan igual: una visita."
         />
       </section>
 

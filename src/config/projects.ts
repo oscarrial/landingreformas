@@ -46,7 +46,7 @@ export const worksPage = {
   coverCaption: "Salón y comedor de una de las obras, una vez terminada",
 
   facts: [
-    { label: "Obras", value: "7 documentadas" },
+    { label: "Obras", value: "8 documentadas" },
     { label: "Ámbito", value: siteConfig.serviceArea },
     { label: "Comparaciones", value: "Antes y después reales" },
     {
@@ -119,6 +119,15 @@ export const worksPage = {
       body: "Un tendedero alicatado que deja de ser zona de lavado. Cerrado y terminado, pasa a funcionar como una pieza más de la zona de día, con sitio para una mesa.",
       before: photos.terrazaAntes,
       after: photos.terrazaDespues,
+    },
+    {
+      id: "humedad",
+      index: "08",
+      name: "Humedad en pared",
+      scope: "Saneado · reparación · pintura",
+      body: "La pintura y el revoque levantados por la humedad se sanean hasta el soporte y se vuelven a cerrar. La pared queda lisa y pintada, con el rodapié repuesto.",
+      before: photos.humedadAntes,
+      after: photos.humedadDespues,
     },
   ] satisfies Work[],
 };

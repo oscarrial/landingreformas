@@ -219,6 +219,15 @@ export const landingServices: LandingService[] = [
     href: "/reformas-pisos-madrid",
     pending: false,
   },
+  {
+    number: "05",
+    name: "Humedades",
+    description:
+      "Diagnóstico y tratamiento de filtraciones, capilaridad y condensación.",
+    photo: photos.humedadAntes,
+    href: "/presupuesto#formulario",
+    pending: true,
+  },
 ];
 
 export interface Testimonial {

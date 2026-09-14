@@ -207,7 +207,7 @@ export function Landing() {
         <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-soft">
           Servicios
         </p>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {landingServices.map((service, i) => (
             <Reveal key={service.href} delay={i * 60}>
               <Link href={service.href} className="group block">
