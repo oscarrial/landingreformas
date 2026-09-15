@@ -1,4 +1,5 @@
 import type { Lead } from "@/lib/db/types";
+import { areaLabel, reformTypeLabel, timeframeLabel } from "@/lib/lead-labels";
 
 /**
  * Lead email notification — SERVER ONLY.
@@ -20,31 +21,6 @@ export type EmailSendStatus = "sent" | "disabled" | "failed";
 
 const LEAD_EMAIL_TO = process.env.LEAD_EMAIL_TO ?? "inteliagroup1@gmail.com";
 
-const REFORM_LABELS: Record<string, string> = {
-  vivienda_completa: "Vivienda completa",
-  piso: "Piso",
-  cocina: "Cocina",
-  bano: "Baño",
-  chalet: "Chalet",
-  otro: "Otro",
-};
-
-const AREA_LABELS: Record<string, string> = {
-  madrid: "Madrid capital",
-  pozuelo: "Pozuelo",
-  majadahonda: "Majadahonda",
-  las_rozas: "Las Rozas",
-  boadilla: "Boadilla",
-  otro: "Otro",
-};
-
-const TIMEFRAME_LABELS: Record<string, string> = {
-  lo_antes_posible: "Lo antes posible",
-  "1_3_meses": "En 1–3 meses",
-  "3_6_meses": "En 3–6 meses",
-  mas_adelante: "Más adelante",
-};
-
 function line(label: string, value: string | number | null | undefined): string {
   if (value === null || value === undefined || value === "") return "";
   return `${label}: ${value}\n`;
@@ -64,10 +40,10 @@ function buildEmailText(lead: Lead): string {
     line("Email", lead.email),
     ``,
     `Proyecto`,
-    line("Reforma", REFORM_LABELS[lead.reform_type] ?? lead.reform_type),
+    line("Reforma", reformTypeLabel(lead.reform_type)),
     line("Superficie", lead.size_m2 ? `${lead.size_m2} m²` : "No lo sé"),
-    line("Zona", AREA_LABELS[lead.area ?? ""] ?? lead.area),
-    line("Cuándo empezar", TIMEFRAME_LABELS[lead.start_timeframe] ?? lead.start_timeframe),
+    line("Zona", areaLabel(lead.area)),
+    line("Cuándo empezar", timeframeLabel(lead.start_timeframe)),
     ``,
     `Origen`,
     line("Página de llegada", a.landing_page),

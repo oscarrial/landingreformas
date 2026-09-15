@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getLeadRepository, ensureSchema } from "@/lib/db";
 import { formatDateShort } from "@/lib/format";
+import { reformTypeLabel } from "@/lib/lead-labels";
 import { LeadFilters } from "@/components/admin/lead-filters";
 import { QuickStatusSelect } from "@/components/admin/quick-status-select";
 
@@ -74,7 +75,7 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                   </Link>
                 </td>
                 <td className="px-4 py-3 font-medium text-ink">{lead.name}</td>
-                <td className="px-4 py-3 text-ink-soft">{reformLabel(lead.reform_type)}</td>
+                <td className="px-4 py-3 text-ink-soft">{reformTypeLabel(lead.reform_type)}</td>
                 <td className="px-4 py-3 text-ink-soft">{lead.postal_code}</td>
                 <td className="px-4 py-3 text-ink-soft">
                   {lead.attribution.utm_source ?? lead.attribution.first_touch_source ?? "direct"}
@@ -99,17 +100,6 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
       <Pagination page={page} totalPages={totalPages} />
     </div>
   );
-}
-
-function reformLabel(value: string): string {
-  const labels: Record<string, string> = {
-    integral: "Integral",
-    cocina: "Cocina",
-    bano: "Baño",
-    varias: "Varias",
-    otro: "Otro",
-  };
-  return labels[value] ?? value;
 }
 
 function Pagination({ page, totalPages }: { page: number; totalPages: number }) {

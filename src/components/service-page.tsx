@@ -20,6 +20,7 @@ const REFORM_TYPE_BY_SLUG: Record<string, ReformType> = {
   "reformas-pisos-madrid": "piso",
   "reformas-cocinas-madrid": "cocina",
   "reformas-banos-madrid": "bano",
+  "reformas-humedades-madrid": "humedades",
 };
 
 interface ServicePageProps {

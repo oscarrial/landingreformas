@@ -73,6 +73,15 @@ describe("leadSchema", () => {
     expect(parsed.success).toBe(true);
   });
 
+  it("accepts humedades as a reform type", () => {
+    const parsed = leadSchema.safeParse({
+      ...validPayload,
+      reform_type: "humedades",
+    });
+    expect(parsed.success).toBe(true);
+    if (parsed.success) expect(parsed.data.reform_type).toBe("humedades");
+  });
+
   it("normalizes missing attribution fields to null (no undefined)", () => {
     const parsed = leadSchema.safeParse({
       ...validPayload,

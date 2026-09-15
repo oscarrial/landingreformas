@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getLeadRepository, ensureSchema } from "@/lib/db";
 import { formatDate, formatEuro } from "@/lib/format";
 import { computeCommission } from "@/lib/commission";
+import { areaLabel, reformTypeLabel, timeframeLabel } from "@/lib/lead-labels";
 import { LeadDetailForm } from "@/components/admin/lead-detail-form";
 
 interface LeadDetailPageProps {
@@ -59,7 +60,7 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
             <Field label="Teléfono" value={lead.phone} />
             <Field label="Email" value={lead.email ?? "—"} />
-            <Field label="Reforma" value={reformLabel(lead.reform_type)} />
+            <Field label="Reforma" value={reformTypeLabel(lead.reform_type)} />
             <Field label="Zona" value={areaLabel(lead.area)} />
             <Field label="Superficie" value={lead.size_m2 ? `${lead.size_m2} m²` : "No lo sé"} />
             <Field label="Inicio" value={timeframeLabel(lead.start_timeframe)} />
@@ -123,41 +124,6 @@ function Field({ label, value, strong }: { label: string; value: string; strong?
   );
 }
 
-function reformLabel(v: string): string {
-  return (
-    {
-      vivienda_completa: "Vivienda completa",
-      piso: "Piso",
-      cocina: "Cocina",
-      bano: "Baño",
-      chalet: "Chalet",
-      otro: "Otro",
-    }[v] ?? v
-  );
-}
-function areaLabel(v: string | null): string {
-  if (!v) return "—";
-  return (
-    {
-      madrid: "Madrid capital",
-      pozuelo: "Pozuelo",
-      majadahonda: "Majadahonda",
-      las_rozas: "Las Rozas",
-      boadilla: "Boadilla",
-      otro: "Otro",
-    }[v] ?? v
-  );
-}
-function timeframeLabel(v: string): string {
-  return (
-    {
-      lo_antes_posible: "Lo antes posible",
-      "1_3_meses": "En 1–3 meses",
-      "3_6_meses": "En 3–6 meses",
-      mas_adelante: "Más adelante",
-    }[v] ?? v
-  );
-}
 function notifyLabel(v: string | null): string {
   return { pending: "Pendiente", sent: "Enviado", failed: "Error", disabled: "Desactivado" }[v ?? ""] ?? "—";
 }

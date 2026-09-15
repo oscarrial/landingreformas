@@ -10,6 +10,7 @@ export const reformTypeSchema = z.enum([
   "piso",
   "cocina",
   "bano",
+  "humedades",
   "chalet",
   "otro",
 ]);

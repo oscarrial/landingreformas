@@ -16,6 +16,7 @@ export type ReformType =
   | "piso"
   | "cocina"
   | "bano"
+  | "humedades"
   | "chalet"
   | "otro";
 type Area = "madrid" | "pozuelo" | "majadahonda" | "las_rozas" | "boadilla" | "otro";
@@ -50,6 +51,7 @@ const REFORM_OPTIONS: { value: ReformType; label: string }[] = [
   { value: "piso", label: "Piso" },
   { value: "cocina", label: "Cocina" },
   { value: "bano", label: "Baño" },
+  { value: "humedades", label: "Humedades" },
   { value: "chalet", label: "Chalet" },
   { value: "otro", label: "Otro" },
 ];
