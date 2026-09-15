@@ -28,8 +28,10 @@ import { trackAttribution } from "@/lib/attribution/client";
  * Order (critical):
  *  1. dataLayer init + gtag stub.
  *  2. Consent Mode v2 DEFAULT = denied.
- *  3. (if decided) Consent Mode UPDATE with the visitor's choices.
- *  4. GTM loader (only when analytics consent is granted and gtmId is set).
+ *  3. GTM loader (always when gtmId is set): Google tags run in cookieless
+ *     "denied" mode until the visitor decides, so Ads can detect the tag
+ *     while no analytics/marketing cookie is written before consent.
+ *  4. (if decided) Consent Mode UPDATE with the visitor's choices.
  *  5. Direct GA4 gtag ONLY as fallback when no GTM container is configured
  *     (avoids double-loading when both are present).
  *
@@ -84,7 +86,6 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const configured = Boolean(gtmId) || Boolean(ga4Id);
   const analyticsOn = consent?.analytics ?? false;
   const marketingOn = consent?.marketing ?? false;
-  const loadTags = consent ? analyticsOn : false;
   const granted = toConsentMode(analyticsOn, marketingOn);
 
   return (
@@ -108,7 +109,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
         </Script>
       ) : null}
 
-      {loadTags && gtmId ? (
+      {gtmId ? (
         <>
           <Script id="gtm-init" strategy="afterInteractive">
             {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -129,7 +130,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
       ) : null}
 
       {/* GA4 only as a fallback when GTM is not configured. */}
-      {loadTags && !gtmId && ga4Id ? (
+      {!gtmId && ga4Id ? (
         <Script id="ga4-fallback" strategy="afterInteractive">
           {`gtag('js',new Date());gtag('config','${ga4Id}',{ 'page_path': location.pathname });`}
         </Script>

@@ -39,9 +39,13 @@ NEXT_PUBLIC_NOINDEX=
 - **Dónde se carga:** `src/components/providers/analytics-provider.tsx`, montado en
   los layouts público (`(site)` y `(landing)`). Solo **un** provider por ruta, así
   que nunca hay doble carga.
-- **Cuándo se carga:** solo si `analytics` está configurado **y** el visitante ha
-  dado consentimiento de analítica (categoría del CMP). Antes de eso, no se inyecta
-  nada de terceros.
+- **Cuándo se carga:** el contenedor GTM se inyecta siempre que
+  `NEXT_PUBLIC_GTM_ID` esté configurado, pero con **Consent Mode en `denied` por
+  defecto**: hasta que el visitante decide en el banner, las etiquetas de Google
+  funcionan en modo sin cookies (sin `analytics_storage`/`ad_storage`). Al aceptar,
+  se envía el `update` con las señales concedidas. Esto permite que Google Ads
+  detecte la etiqueta (informe de cobertura) sin escribir cookies antes del
+  consentimiento.
 - **Cómo cambiar el container:** `NEXT_PUBLIC_GTM_ID` (o `NEXT_PUBLIC_GTM_CONTAINER_ID`).
 - **Verificación:** Google Tag Manager → Preview + Debug (el contenedor recibe
   `gtm.js`, `gtm.start`). GA4 → DebugView.
