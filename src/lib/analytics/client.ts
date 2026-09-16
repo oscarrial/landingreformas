@@ -68,6 +68,14 @@ export function trackGenerateLead(leadId?: string): void {
   push("generate_lead", { lead_id: leadId ?? undefined, ...attributionPayload() });
 }
 
+/**
+ * Fired at the same moment the thank-you message replaces the form.
+ * Alias kept for the ads team, which triggers its conversions on this name.
+ */
+export function trackBudgetFormSent(): void {
+  push("formulario_presupuesto_enviado", attributionPayload());
+}
+
 export function trackFormError(errorKey: string): void {
   // errorKey is a non-PII category (e.g. "validation" | "server").
   push("form_error", { error_key: errorKey, ...attributionPayload() });

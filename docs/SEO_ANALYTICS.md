@@ -95,6 +95,7 @@ incluyen PII** (teléfono, email, nombre, dirección o texto de usuario).
 | `form_start` | El usuario empieza el wizard | `first_touch_source`, `last_touch_source` | — | Embudo de conversión |
 | `form_step_complete` | Completa cada paso | `step` | `{step: 2}` | Abandono por paso |
 | `generate_lead` | El servidor ACEPTA el lead | `lead_id` (sin PII) | `{lead_id: "KOF-…"}` | Conversión principal (Google Ads) |
+| `formulario_presupuesto_enviado` | Igual que `generate_lead` (se muestra el "gracias") | — | — | Alias para las conversiones del equipo de Ads |
 | `form_error` | Fallo al enviar el formulario | `error_key` | `{error_key: "server"}` | Detección de fricción |
 | `click_phone` | Clic en teléfono | — | — | Conversión de contacto |
 | `click_whatsapp` | Clic en WhatsApp | — | — | Conversión de contacto |

@@ -133,10 +133,11 @@ Abstracción preparada para email / CRM / n8n / Make sin acoplar el proyecto.
 - Las cookies no esenciales **no se cargan hasta que** el usuario consiente
   (banner con Aceptar / Rechazar / Configurar, visualmente equivalentes).
 - Panel de preferencias: Necesarias (siempre), Analítica, Marketing.
-- GTM / GA4 / Ads solo se inyectan si el ID está configurado **y** hay
-  consentimiento analítico.
+- GTM se carga siempre que haya ID, con Consent Mode v2 en `denied` por defecto;
+  los eventos solo se empujan con consentimiento analítico.
 - Eventos: `form_start`, `form_step_complete`, `generate_lead`,
-  `click_phone`, `click_whatsapp`, `view_service`, `view_budget_page`.
+  `formulario_presupuesto_enviado`, `click_phone`, `click_whatsapp`,
+  `view_service`, `view_budget_page`.
 - **Nunca se envía PII a analítica** (ni nombre, ni teléfono, ni email).
 
 ## SEO técnico

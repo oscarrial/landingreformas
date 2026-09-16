@@ -8,6 +8,7 @@ import {
   trackFormError,
   trackFormStepComplete,
   trackGenerateLead,
+  trackBudgetFormSent,
 } from "@/lib/analytics/client";
 import { cn } from "@/lib/cn";
 
@@ -237,6 +238,8 @@ export function LeadForm({ defaultReformType }: LeadFormProps = {}) {
       setStatus("success");
       // generate_lead fires ONLY after the server confirmed the lead.
       trackGenerateLead(data.lead_id);
+      // Same moment the thank-you screen shows (ads conversions use this one).
+      trackBudgetFormSent();
     } catch (err) {
       setServerMessage(
         err instanceof Error ? err.message : "No pudimos enviar tu solicitud."
